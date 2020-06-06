@@ -8,14 +8,14 @@ import (
 
 type customerView struct {
 
-	//定义必要的字段
-	key string //接收用户输入
-	loop bool // 表示是否循环的主菜单
-	//增加一个字段customerService,否则无法调用customerService
+	//Define the necessary fields
+	key string //Receive user input
+	loop bool // Main menu indicating whether to cycle 表示是否循环的主菜单
+	//Add a field customerService, otherwise customerService cannot be called
 	customerService *service.CustomerService
 }
 
-//显示所有的客户信息
+//Display all customer information
 func (this *customerView) list() {
 
 	//获取所有的客户信息(在切片中)
