@@ -4,18 +4,18 @@ import (
 	"CustomerManagementSystem/model"
 )
 
-//该CustomerService,完成对客户的操作,包括增删改
+//The CustomerService completes CRUD operations on customers 该CustomerService,完成对客户的操作,包括增删改
 
 type CustomerService struct {
 	customers []model.Customer
-	//声明一个字段,表示当前切片含有多少个客户
-	//该字段后面,还可以作为新客户的id+1
+	//Declare a field indicating how many customers the current slice contains
+// Behind this field, it can also be used as the id+1 for new customers
 	customerNum int
 }
 
-//编写一个方法,可以反悔 *CustomerService
+//Write a method that can return *CustomerService
 func NewCustomerService() *CustomerService {
-	//为了能够看到客户在切片中,我们初始化一个客户
+	//To be able to see the customer in the slice, we initialize a customer
 	customerService := &CustomerService{}
 	customerService.customerNum = 1
 	customer := model.NewCustomer(1, "Jean", "Homme", 20, "+33 613749302", "jean@gmail.com")
@@ -23,17 +23,42 @@ func NewCustomerService() *CustomerService {
 	return customerService
 }
 
-//返回客户切片
+//Return customer slice
 func (this *CustomerService) List() []model.Customer {
 	return this.customers
 }
 
-//添加客户到customers切片
-func (this *CustomerService) Add(customer Customer) bool {
+//Add customers to customers slice
+func (this *CustomerService) Add(customer model.Customer) bool {
 
-	//用添加的顺序作为Id
+	//Use the added order as the Id
 	this.customerNum++
 	customer.Id = this.customerNum
 	this.customers = append(this.customers, customer)
 	return true
+}
+
+//Delete customer by id (delete from slice)
+func (this *CustomerService) Delete(id int) bool {
+	index := this.FindById(id)
+	//If index == -1, there is no such client
+	if index == -1 {
+		return false 
+	}
+	//How to remove an element from a slice
+	this.customers = append(this.customers[:index], this.customers[index+1:]...)
+	return true
+}
+
+//Find the corresponding subscript in the slice according to the id, if there is no such customer, return -1
+func (this *CustomerService) FindById(id int)  int {
+	index := -1
+	//Iterate through this.customers slice 遍历this.customers 切片
+	for i := 0; i < len(this.customers); i++ {
+		if this.customers[i].Id == id {
+			//found it
+			index = i
+		}
+	}
+	return index
 }
